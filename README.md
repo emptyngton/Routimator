@@ -1,4 +1,3 @@
-Routimator
 Routimator is an advanced state machine plugin designed for Voxta and Timeline. It builds on the MacGruber state machine (heavily modified) to serve as a powerful navigation layer between Timeline animations and Voxta actions. Using a breadth-first search (BFS) algorithm, Routimator finds the shortest valid path from a starting state (or animation) to a target state, automatically triggering the necessary transitions along the way.
 
 👉 Check out our Routimator Diagram Visualizer to better understand how it works.
