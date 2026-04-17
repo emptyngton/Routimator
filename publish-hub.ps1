@@ -30,12 +30,16 @@ if ($Main) {
     $MainTemplate = Join-Path $RepoRoot "package\hub-main.template.bbc"
     if (-not (Test-Path $MainTemplate)) { throw "Main template missing: $MainTemplate" }
 
-    $content = Get-Content -Raw -Path $MainTemplate
+    $content = Get-Content -Raw -Encoding UTF8 -Path $MainTemplate
     Set-Clipboard -Value $content
 
     Write-Host ""
     Write-Host "===== Hub main page BBCode copied to clipboard =====" -ForegroundColor Green
-    Write-Host "  Paste into the resource description editor at:"
+    Write-Host ""
+    Write-Host "IMPORTANT: on Hub's description editor, click the [ ] 'Toggle BB code'" -ForegroundColor Yellow
+    Write-Host "button in the toolbar FIRST, then paste. Otherwise the tags show as" -ForegroundColor Yellow
+    Write-Host "literal text." -ForegroundColor Yellow
+    Write-Host ""
     Write-Host "  $HubResourceUrl/edit"
     Write-Host ""
 
@@ -127,7 +131,7 @@ $changelogBB = Convert-MarkdownToBBCode $releaseBody
 $UpdateTemplate = Join-Path $RepoRoot "package\hub-update.template.bbc"
 if (-not (Test-Path $UpdateTemplate)) { throw "Update template missing: $UpdateTemplate" }
 
-$rendered = Get-Content -Raw -Path $UpdateTemplate
+$rendered = Get-Content -Raw -Encoding UTF8 -Path $UpdateTemplate
 $rendered = $rendered.Replace('{{SEMVER}}', $Tag)
 $rendered = $rendered.Replace('{{VAM_VERSION}}', $VamVersion)
 $rendered = $rendered.Replace('{{CHANGELOG}}', $changelogBB)
@@ -151,7 +155,10 @@ Write-Host ""
 Write-Host "On Hub's form:" -ForegroundColor Cyan
 Write-Host "  1. Type version number (e.g. $VamVersion or $($Tag -replace '^v', ''))"
 Write-Host "  2. Drag the highlighted .var from Explorer into File Attachments"
-Write-Host "  3. Paste (Ctrl+V) into the Update Message editor"
-Write-Host "  4. Save"
+Write-Host "  3. In the Update Message toolbar, click the [ ] 'Toggle BB code' button" -ForegroundColor Yellow
+Write-Host "  4. Paste (Ctrl+V) into the editor"
+Write-Host "  5. Save"
+Write-Host ""
+Write-Host "Step 3 is critical — without it, BBCode tags show as literal text." -ForegroundColor Yellow
 Write-Host ""
 Read-Host "Press Enter to close" | Out-Null
