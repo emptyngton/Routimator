@@ -1,17 +1,20 @@
 # build-release.ps1
-# Produces a clean release/Routimator/ folder containing only the files VaM needs:
+# Produces a clean Routimator/ folder SIBLING to this dev folder, containing only the
+# files VaM needs:
 #   - src/          (all plugin source)
 #   - Routimator.cslist
 #   - LICENSE
-# VAMPM can then "Add directory" on release/Routimator/ without picking up dev junk.
+# VAMPM "Add Directory" on the sibling folder packages only runtime files; the path it
+# embeds (Custom/Scripts/Lapiro/Routimator/) is where end users will see the plugin.
 #
 # Uses `git archive HEAD` so the output reflects committed state, not working-tree state.
-# Invoked by hooks/pre-push, or can be run manually: .\build-release.ps1
+# Invoked by hooks/pre-push, or run manually: .\build-release.ps1
 
 $ErrorActionPreference = "Stop"
 
 $RepoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$OutDir = Join-Path $RepoRoot "release\Routimator"
+# Output sibling to repo: .../Lapiro/Project_Routimator/ -> .../Lapiro/Routimator/
+$OutDir = Join-Path (Split-Path -Parent $RepoRoot) "Routimator"
 $TempZip = Join-Path $env:TEMP "routimator-release-$PID.zip"
 
 if (Test-Path $OutDir) {

@@ -28,5 +28,4 @@ obj/
 Thumbs.db
 desktop.ini
 
-# Build output (produced by build-release.ps1 / pre-push hook)
-release/
+# (Release output now lives at ../Routimator/ — outside the repo, nothing to ignore.)
