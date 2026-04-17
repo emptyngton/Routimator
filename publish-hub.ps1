@@ -159,6 +159,6 @@ Write-Host "  3. In the Update Message toolbar, click the [ ] 'Toggle BB code' b
 Write-Host "  4. Paste (Ctrl+V) into the editor"
 Write-Host "  5. Save"
 Write-Host ""
-Write-Host "Step 3 is critical — without it, BBCode tags show as literal text." -ForegroundColor Yellow
+Write-Host "Step 3 is critical - without it, BBCode tags show as literal text." -ForegroundColor Yellow
 Write-Host ""
 Read-Host "Press Enter to close" | Out-Null
