@@ -1,0 +1,29 @@
+# JetBrains Rider / IntelliJ
+.idea/
+*.iml
+*.user
+*.userosscache
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+*.suo
+*.userprefs
+
+# .NET build outputs
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+
+# Backup and editor temp files
+*.bak
+*.swp
+*.tmp
+*~
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
