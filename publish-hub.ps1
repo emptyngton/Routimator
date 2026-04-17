@@ -20,6 +20,14 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Force UTF-8 for external command stdout so emojis/non-ASCII from gh survive.
+# PS 5.1 defaults Console.OutputEncoding to the OEM codepage (often 437 or 1252).
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
+# Use WinForms clipboard API directly for guaranteed UnicodeText format.
+Add-Type -AssemblyName System.Windows.Forms
+
 $RepoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $HubResourceUrl = "https://hub.virtamate.com/resources/routimator.55321"
 
@@ -31,7 +39,7 @@ if ($Main) {
     if (-not (Test-Path $MainTemplate)) { throw "Main template missing: $MainTemplate" }
 
     $content = Get-Content -Raw -Encoding UTF8 -Path $MainTemplate
-    Set-Clipboard -Value $content
+    [System.Windows.Forms.Clipboard]::SetText($content, [System.Windows.Forms.TextDataFormat]::UnicodeText)
 
     Write-Host ""
     Write-Host "===== Hub main page BBCode copied to clipboard =====" -ForegroundColor Green
@@ -76,11 +84,14 @@ if ($LASTEXITCODE -ne 0) { throw "gh release download failed." }
 $varFile = Get-ChildItem -Path $DistDir -Filter "*.var" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 if (-not $varFile) { throw "No .var found after download." }
 
-# Fetch release body (Markdown)
+# Fetch release body (Markdown). gh outputs one line per array element;
+# join explicitly so newlines are preserved for the multiline regexes below.
 Write-Host "Fetching release notes..." -ForegroundColor DarkGray
-$releaseBody = & gh release view $Tag --json body --jq '.body'
+$bodyLines = & gh release view $Tag --json body --jq '.body'
 if ($LASTEXITCODE -ne 0) { throw "gh release view failed." }
-$releaseUrl = & gh release view $Tag --json url --jq '.url'
+$releaseBody = ($bodyLines | Out-String).TrimEnd()
+
+$releaseUrl = (& gh release view $Tag --json url --jq '.url' | Out-String).Trim()
 
 # -------- Markdown -> BBCode converter (scoped to what GitHub generates) --------
 function Convert-MarkdownToBBCode {
@@ -110,9 +121,10 @@ function Convert-MarkdownToBBCode {
     $text = [regex]::Replace($text, '(?m)^##\s+(.+)$',  '[HEADING=2]$1[/HEADING]')
     $text = [regex]::Replace($text, '(?m)^#\s+(.+)$',   '[HEADING=1]$1[/HEADING]')
 
-    # Inline: bold, code, links
-    $text = [regex]::Replace($text, '\*\*(.+?)\*\*',    '[B]$1[/B]')
-    $text = [regex]::Replace($text, '`([^`]+)`',        '[ICODE]$1[/ICODE]')
+    # Inline: bold, links. Hub's editor doesn't reliably render [ICODE], so
+    # backticked content is stripped to plain text.
+    $text = [regex]::Replace($text, '\*\*(.+?)\*\*', '[B]$1[/B]')
+    $text = [regex]::Replace($text, '`([^`]+)`',     '$1')
     $text = [regex]::Replace($text, '\[([^\]]+)\]\(([^)]+)\)', "[URL='`$2']`$1[/URL]")
 
     # Bare URLs on their own (rough pass): already handled by [URL] tags or left as-is.
