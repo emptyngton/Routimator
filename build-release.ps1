@@ -8,9 +8,15 @@
 # embeds (Custom/Scripts/Lapiro/Routimator/) is where end users will see the plugin.
 #
 # Uses `git archive HEAD` so the output reflects committed state, not working-tree state.
-# Invoked by hooks/pre-push, or run manually: .\build-release.ps1
+# Invoked by hooks/pre-push with -Quiet, or run manually: .\build-release.ps1
+
+param(
+    # Set by the pre-push hook to skip the summary + pause (push would hang on Read-Host).
+    [switch]$Quiet
+)
 
 $ErrorActionPreference = "Stop"
+$stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 $RepoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 # Output sibling to repo: .../Lapiro/Project_Routimator/ -> .../Lapiro/Routimator/
@@ -37,4 +43,30 @@ finally {
     Pop-Location
 }
 
-Write-Host "Built release: $OutDir" -ForegroundColor Green
+$stopwatch.Stop()
+
+if ($Quiet) {
+    # Hook context: one line for the push log, no pause.
+    Write-Host "Built release: $OutDir" -ForegroundColor Green
+}
+else {
+    # Manual run: show a summary and wait for the user so the window doesn't vanish.
+    $files = @(Get-ChildItem -Path $OutDir -Recurse -File)
+    $totalBytes = ($files | Measure-Object -Property Length -Sum).Sum
+    $sizeKb = [math]::Round($totalBytes / 1KB, 1)
+
+    Write-Host ""
+    Write-Host "===== Release built =====" -ForegroundColor Cyan
+    Write-Host ("  Location : {0}" -f $OutDir)
+    Write-Host ("  Files    : {0}" -f $files.Count)
+    Write-Host ("  Size     : {0} KB" -f $sizeKb)
+    Write-Host ("  Elapsed  : {0} ms" -f $stopwatch.ElapsedMilliseconds)
+    Write-Host ""
+    Write-Host "Files:" -ForegroundColor DarkGray
+    foreach ($f in $files) {
+        $rel = $f.FullName.Substring($OutDir.Length).TrimStart('\')
+        Write-Host ("  {0}" -f $rel) -ForegroundColor DarkGray
+    }
+    Write-Host ""
+    Read-Host "Press Enter to close" | Out-Null
+}

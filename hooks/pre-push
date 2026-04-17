@@ -9,4 +9,4 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 # Convert to Windows path for PowerShell
 WIN_REPO_ROOT=$(cygpath -w "$REPO_ROOT" 2>/dev/null || echo "$REPO_ROOT")
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${WIN_REPO_ROOT}\\build-release.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${WIN_REPO_ROOT}\\build-release.ps1" -Quiet
