@@ -94,7 +94,7 @@ if (Test-Path $AddonPackages) {
     Write-Host "Installed to AddonPackages: $addonTarget" -ForegroundColor DarkGray
 }
 else {
-    Write-Host "Warning: AddonPackages not found at $AddonPackages — skipped install." -ForegroundColor Yellow
+    Write-Host "Warning: AddonPackages not found at $AddonPackages - skipped install." -ForegroundColor Yellow
 }
 
 # Fetch release body (Markdown). gh outputs one line per array element;
