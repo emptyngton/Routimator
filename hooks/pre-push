@@ -1,0 +1,12 @@
+#!/bin/sh
+# pre-push — rebuild release/Routimator/ from HEAD before pushing.
+# Activated via: git config core.hooksPath hooks
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+# Convert to Windows path for PowerShell
+WIN_REPO_ROOT=$(cygpath -w "$REPO_ROOT" 2>/dev/null || echo "$REPO_ROOT")
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${WIN_REPO_ROOT}\\build-release.ps1"

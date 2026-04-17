@@ -27,3 +27,6 @@ obj/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Build output (produced by build-release.ps1 / pre-push hook)
+release/
