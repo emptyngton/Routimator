@@ -75,7 +75,7 @@ Use the UI to save/load configurations. Reuse and share complex setups easily.
 
 ## Install
 
-Copy this repo into `<VaM>/Custom/Scripts/Routimator/`, then load `Routimator.cslist` as a plugin (Session plugin recommended).
+Copy this repo into `<VaM>/Custom/Scripts/Lapiro/Routimator/`, then load `Routimator.cslist` as a **Person atom plugin** (from the Person atom's Plugins tab → Add Plugin). Routing is character-specific, so each Person that should be routable needs its own Routimator instance.
 
 **Requirements:**
 - [Virt-A-Mate](https://virtamate.com/)
