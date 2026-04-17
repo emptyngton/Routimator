@@ -84,6 +84,19 @@ if ($LASTEXITCODE -ne 0) { throw "gh release download failed." }
 $varFile = Get-ChildItem -Path $DistDir -Filter "*.var" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 if (-not $varFile) { throw "No .var found after download." }
 
+# Also drop into VaM's AddonPackages so the published build is installable immediately.
+# VaM root is 4 levels above the dev folder: .../Virt-a-Mate-ES/Custom/Scripts/Lapiro/Project_Routimator/
+$VamRoot = (Resolve-Path (Join-Path $RepoRoot "..\..\..\..")).Path
+$AddonPackages = Join-Path $VamRoot "AddonPackages"
+if (Test-Path $AddonPackages) {
+    $addonTarget = Join-Path $AddonPackages $varFile.Name
+    Copy-Item -Path $varFile.FullName -Destination $addonTarget -Force
+    Write-Host "Installed to AddonPackages: $addonTarget" -ForegroundColor DarkGray
+}
+else {
+    Write-Host "Warning: AddonPackages not found at $AddonPackages — skipped install." -ForegroundColor Yellow
+}
+
 # Fetch release body (Markdown). gh outputs one line per array element;
 # join explicitly so newlines are preserved for the multiline regexes below.
 Write-Host "Fetching release notes..." -ForegroundColor DarkGray
