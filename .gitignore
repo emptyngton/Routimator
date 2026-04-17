@@ -28,4 +28,6 @@ obj/
 Thumbs.db
 desktop.ini
 
-# (Release output now lives at ../Routimator/ — outside the repo, nothing to ignore.)
+# Release output lives at ../Routimator/ — outside the repo.
+# Local-only build artifacts:
+dist/
