@@ -55,11 +55,13 @@ jobs:
           body: |
             **Routimator** is an advanced state machine plugin for Virt-A-Mate that coordinates Timeline animations and Voxta AI state. Features BFS path routing, walking-state handshakes for locomotion plugins, preset save/load, and an interactive graph visualizer for editing transitions directly.
 
+            🌐 Also on [VaM Hub](https://hub.virtamate.com/resources/routimator.55321/)
             📚 Full documentation: https://doc.voxta.ai/vam/routimator/
 
             ## Install
-            Download **`Voxta.Routimator.${{ steps.vam.outputs.version }}.var`** below, drop it into your VaM `AddonPackages/` folder, then load `Routimator.cslist` on any Person atom (**Plugins tab → Add Plugin**).
 
-            Requires [VamTimeline](https://hub.virtamate.com/resources/timeline.80/) on the same Person. Voxta integration is optional.
+            Install from [VaM Hub](https://hub.virtamate.com/resources/routimator.55321/) (recommended for auto-updates), or download **`Voxta.Routimator.${{ steps.vam.outputs.version }}.var`** below and drop it into your VaM `AddonPackages/` folder.
+
+            Load `Routimator.cslist` on any Person atom (**Plugins tab → Add Plugin**). Requires [VamTimeline](https://hub.virtamate.com/resources/timeline.80/) on the same Person; Voxta integration is optional.
 
             ---

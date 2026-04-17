@@ -2,6 +2,9 @@
 
 Routimator is an advanced state machine plugin designed for Voxta and Timeline. It builds on the MacGruber state machine (heavily modified) to serve as a powerful navigation layer between Timeline animations and Voxta actions. Using a breadth-first search (BFS) algorithm, Routimator finds the shortest valid path from a starting state (or animation) to a target state, automatically triggering the necessary transitions along the way.
 
+🌐 **Available on [VaM Hub](https://hub.virtamate.com/resources/routimator.55321/)** — recommended install for auto-updates.
+📚 **[Full documentation](https://doc.voxta.ai/vam/routimator/)**
+
 👉 Check out our Routimator Diagram Visualizer to better understand how it works.
 
 ## 🔑 Key Features
@@ -75,7 +78,11 @@ Use the UI to save/load configurations. Reuse and share complex setups easily.
 
 ## Install
 
-Copy this repo into `<VaM>/Custom/Scripts/Lapiro/Routimator/`, then load `Routimator.cslist` as a **Person atom plugin** (from the Person atom's Plugins tab → Add Plugin). Routing is character-specific, so each Person that should be routable needs its own Routimator instance.
+**End users:** install from [VaM Hub](https://hub.virtamate.com/resources/routimator.55321/), or grab the latest `.var` from the [GitHub Releases](https://github.com/emptyngton/Routimator/releases) page.
+
+**From source (for development):** copy this repo into `<VaM>/Custom/Scripts/Lapiro/Project_Routimator/` and point VaM at `Custom/Scripts/Lapiro/Routimator/Routimator.cslist` (built by `build-release.ps1` / the pre-push hook).
+
+Either way, load `Routimator.cslist` as a **Person atom plugin** (from the Person atom's Plugins tab → Add Plugin). Routing is character-specific, so each Person that should be routable needs its own Routimator instance.
 
 **Requirements:**
 - [Virt-A-Mate](https://virtamate.com/)
