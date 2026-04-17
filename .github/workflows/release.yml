@@ -1,0 +1,53 @@
+name: Release
+
+# Fires when a semver tag is pushed (e.g., v0.1.0). The VaM package version is read from
+# package/VAM_VERSION — bump that file before tagging so each release gets a unique number.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write   # Needed to create a GitHub Release and upload the .var asset
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout at tag
+        uses: actions/checkout@v4
+
+      - name: Read VaM package version
+        id: vam
+        run: |
+          VERSION=$(cat package/VAM_VERSION)
+          if ! [[ "$VERSION" =~ ^[0-9]+$ ]]; then
+            echo "::error::package/VAM_VERSION must contain a single integer. Got: '$VERSION'"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building Voxta.Routimator.$VERSION.var"
+
+      - name: Build .var
+        run: |
+          VER="${{ steps.vam.outputs.version }}"
+          STAGE=$(mktemp -d)
+          PLUGIN_DIR="$STAGE/Custom/Scripts/Lapiro/Routimator"
+          mkdir -p "$PLUGIN_DIR"
+          cp -r src Routimator.cslist LICENSE "$PLUGIN_DIR/"
+          cp package/meta.template.json "$STAGE/meta.json"
+
+          cd "$STAGE"
+          # Zip with forward-slash entry paths (ZIP spec + VaM compatibility).
+          zip -r "$GITHUB_WORKSPACE/Voxta.Routimator.$VER.var" . -x "*.DS_Store"
+
+          echo ""
+          echo "=== .var contents ==="
+          unzip -l "$GITHUB_WORKSPACE/Voxta.Routimator.$VER.var"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Voxta.Routimator.*.var
+          generate_release_notes: true
+          fail_on_unmatched_files: true
