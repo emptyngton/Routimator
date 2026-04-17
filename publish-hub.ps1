@@ -6,7 +6,7 @@
 #   .\publish-hub.ps1           - Update flow: downloads latest .var from GitHub Release,
 #                                 renders package/hub-update.template.bbc with this release's
 #                                 changelog (converted from Markdown to BBCode), copies to
-#                                 clipboard, opens Hub's add-version page and Explorer at the
+#                                 clipboard, opens Hub's post-update page and Explorer at the
 #                                 downloaded .var.
 #   .\publish-hub.ps1 -Main     - Main-page flow: copies package/hub-main.template.bbc to the
 #                                 clipboard so you can paste it into Hub's resource description
@@ -146,9 +146,9 @@ Write-Host ("  Release  : {0} (VaM package #{1})" -f $Tag, $VamVersion)
 Write-Host ("  .var     : {0}" -f $varFile.FullName)
 Write-Host "  BBCode   : copied to clipboard"
 Write-Host ""
-Write-Host "Opening Hub add-version page + Explorer at the .var..." -ForegroundColor DarkGray
+Write-Host "Opening Hub post-update page + Explorer at the .var..." -ForegroundColor DarkGray
 
-Start-Process "$HubResourceUrl/add-version"
+Start-Process "$HubResourceUrl/post-update"
 Start-Process "explorer.exe" -ArgumentList "/select,`"$($varFile.FullName)`""
 
 Write-Host ""
