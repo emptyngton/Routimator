@@ -67,7 +67,7 @@ namespace Routimator
                 return;
             }
 
-            // Krok 1: Wyczyść istniejącą kolejkę, aby zapewnić start od zera.
+            // Step 1: Clear the existing queue to ensure we start fresh.
             JSONStorableAction clearAction = timelineStorable.GetAction("Clear Queue");
             if (clearAction != null && clearAction.actionCallback != null)
             {
@@ -75,11 +75,11 @@ namespace Routimator
             }
             else
             {
-                // To potencjalny problem, więc logujemy go jako błąd. Nowa trasa zostanie dołączona do istniejącej.
-                SuperController.LogError("RoutimatorTimeline: Could not find 'Stop And Clear Animation Queue' action. The new route will be added to any existing items in the Timeline queue.");
+                // This is a potential problem, so we log it as an error. The new route will be appended to the existing queue.
+                SuperController.LogError("RoutimatorTimeline: Could not find 'Clear Queue' action. The new route will be added to any existing items in the Timeline queue.");
             }
 
-            // Krok 2: Znajdź chooser 'Add To Queue' używając poprawnej metody.
+            // Step 2: Find the 'Add To Queue' chooser using the correct method.
             JSONStorableStringChooser addToQueueChooser = timelineStorable.GetStringChooserJSONParam("Add To Queue");
 
             if (addToQueueChooser == null)
@@ -88,15 +88,15 @@ namespace Routimator
                 return;
             }
 
-            // Krok 3: Dodaj każdy stan z trasy do kolejki.
+            // Step 3: Add each state from the route to the queue.
             for (int i = 0; i < route.Count; i++)
             {
-                SuperController.LogMessage("Scheduling " + route[i].Name);
-                // Ustawienie wartości choosera wywoła callback w Timeline, który doda element do kolejki.
+                Logger.Log("Scheduling " + route[i].Name);
+                // Setting the chooser value triggers Timeline's callback, which adds the item to the queue.
                 addToQueueChooser.val = route[i].Name;
             }
 
-            // Krok 4: Rozpocznij odtwarzanie nowo zbudowanej kolejki.
+            // Step 4: Start playing the newly built queue.
             JSONStorableAction playQueueAction = timelineStorable.GetAction("Play Queue");
             if (playQueueAction != null && playQueueAction.actionCallback != null)
             {

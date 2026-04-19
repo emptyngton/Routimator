@@ -25,8 +25,6 @@ namespace Routimator
         // ====================================================================
         public void ClearAndSetInitialPluginState(RoutimatorState.State initialState = null)
         {
-            string previousOpStateBeforeClear = currentOperationState;
-
             if (currentOperationState != RoutimatorOperationStates.IDLE)
             {
                 InterruptNavigationLogic();
