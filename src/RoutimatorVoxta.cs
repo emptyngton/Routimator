@@ -33,13 +33,10 @@ namespace Routimator
                         if (voxtaStorable != null)
                         {
                             Logger.Log("Voxta plugin found on atom: " + atom.name);
-                            break;
+                            yield break;
                         }
                     }
                 }
-
-                if (voxtaStorable != null)
-                    break;
 
                 yield return null; // Wait a frame before trying again
             }

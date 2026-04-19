@@ -115,12 +115,6 @@ namespace Routimator
 
             st.Group = groupName;
 
-            // Logika dla InfiniteDuration usunięta
-            // if (name.StartsWith("VS_"))
-            // st.InfiniteDuration = true;
-            // else if (name.StartsWith("VT_"))
-            // st.InfiniteDuration = false;
-
             states.Add(st);
             return st;
         }

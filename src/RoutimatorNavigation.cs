@@ -63,8 +63,6 @@ namespace Routimator
             queue.Enqueue(start);
             visited.Add(start);
 
-            // Usunięto nieużywaną zmienną foundTargetPredecessor
-
             while (queue.Count > 0)
             {
                 RoutimatorState.State current = queue.Dequeue();
